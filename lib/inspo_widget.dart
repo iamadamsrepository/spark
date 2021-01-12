@@ -14,11 +14,9 @@ class InspoWidget extends StatefulWidget {
   }
 }
 
-class InspoWidgetState extends State<InspoWidget> {//with AutomaticKeepAliveClientMixin<InspoWidget> {
-  // bool shuffleOn = true;
-
-  // bool get shuffleStatus => shuffleOn;
-  // set shuffleStatus (bool s) => shuffleOn = s;
+class InspoWidgetState extends State<InspoWidget> with AutomaticKeepAliveClientMixin<InspoWidget>{
+  bool shuffleOn = true;
+  bool get shuffleStatus => shuffleOn;
 
   bool get wantKeepAlive => true;
 
@@ -29,10 +27,16 @@ class InspoWidgetState extends State<InspoWidget> {//with AutomaticKeepAliveClie
   }
 
   void shuffle() {
-    next();
+    if (shuffleOn) next();
   }
 
   void next() {}
+
+  void toggleShuffle() {
+    setState(() {
+      shuffleOn = !shuffleOn;
+    });
+  }
 
   Widget buildInspoVal() {
     return Text(widget.title);
@@ -40,7 +44,7 @@ class InspoWidgetState extends State<InspoWidget> {//with AutomaticKeepAliveClie
 
   @override 
   Widget build(BuildContext context) {
-    // super.build(context);
+    super.build(context);
 
     return Padding(
       padding: const EdgeInsets.all(15.0),
@@ -50,8 +54,13 @@ class InspoWidgetState extends State<InspoWidget> {//with AutomaticKeepAliveClie
             width: 120,
             child: Text(
               widget.title,
-              style: TextStyle(fontWeight: FontWeight.bold),)),
+              style: TextStyle(fontWeight: FontWeight.bold)
+            )
+          ),
           buildInspoVal(),
+          Spacer(),
+          if (shuffleOn) IconButton(icon: Icon(Icons.shuffle), onPressed: toggleShuffle)
+          else IconButton(icon: Icon(Icons.ac_unit), onPressed: toggleShuffle)
         ],
       ),
     );

@@ -12,12 +12,13 @@ class ColourWidget extends InspoWidget {
 }
 
 class ColourWidgetState extends InspoWidgetState {
-  RandomColor colour;
+  final RandomColor randomColour = RandomColor();
+  Color colour;
 
   @override 
   void next() {
     setState(() {
-      colour = RandomColor();
+      colour = randomColour.randomColor();
     });
   }
 
@@ -27,7 +28,7 @@ class ColourWidgetState extends InspoWidgetState {
       height: 150, width: 150,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)), 
-        color: colour.randomColor()),
+        color: colour),
     );
   }
 }

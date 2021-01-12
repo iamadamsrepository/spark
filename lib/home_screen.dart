@@ -23,7 +23,6 @@ class HomeScreenState extends State<HomeScreen> {
   List<GlobalKey<InspoWidgetState>> inspoWidgetsStateKeys = [];
   List<InspoWidget> inspoWidgets = [];
   List<bool> inspoWidgetsShowable = [];
-  List<bool> inspoWidgetsShufflable = [];
 
   @override 
   void initState() {
@@ -34,13 +33,12 @@ class HomeScreenState extends State<HomeScreen> {
       inspoWidgetsStateKeys.add(key);
       inspoWidgets.add(widget);
       inspoWidgetsShowable.add(true);
-      inspoWidgetsShufflable.add(true);
     }
   }
 
   void shuffle() {
     for(final key in inspoWidgetsStateKeys) {
-      if(key.currentState != null) key.currentState.shuffle();
+      if(key.currentState != null && key.currentState.shuffleStatus) key.currentState.shuffle();
     }
   }
 
