@@ -46,7 +46,7 @@ class BPMWidgetState extends InspoWidgetState {
   int bpm;
 
   @override 
-  void next() {
+  void shuffle() {
     setState(() {
       bpm = bpms[Random().nextInt(bpms.length)];
     });

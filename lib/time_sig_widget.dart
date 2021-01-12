@@ -22,7 +22,7 @@ class TimeSigWidgetState extends InspoWidgetState {
   String timeSig;
 
   @override 
-  void next() {
+  void shuffle() {
     setState(() {
       timeSig = timeSigs[Random().nextInt(timeSigs.length)];
     });

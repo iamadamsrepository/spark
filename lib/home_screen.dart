@@ -23,6 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   List<GlobalKey<InspoWidgetState>> inspoWidgetsStateKeys = [];
   List<InspoWidget> inspoWidgets = [];
   List<bool> inspoWidgetsShowable = [];
+  List<bool> inspoWidgetsShufflable = [];
 
   @override 
   void initState() {
@@ -33,12 +34,14 @@ class HomeScreenState extends State<HomeScreen> {
       inspoWidgetsStateKeys.add(key);
       inspoWidgets.add(widget);
       inspoWidgetsShowable.add(true);
+      inspoWidgetsShufflable.add(true);
     }
   }
 
   void shuffle() {
     for(final key in inspoWidgetsStateKeys) {
-      if(key.currentState != null && key.currentState.shuffleStatus) key.currentState.shuffle();
+      if(key.currentState != null && inspoWidgetsShufflable[inspoWidgetsStateKeys.indexOf(key)]) 
+        key.currentState.shuffle();
     }
   }
 
@@ -60,6 +63,21 @@ class HomeScreenState extends State<HomeScreen> {
 
   bool isSelected(widget) {
     return inspoWidgetsShowable[inspoWidgets.indexOf(widget)];
+  }
+
+  Widget shuffeToggle(widget) {
+    if (inspoWidgetsShufflable[inspoWidgets.indexOf(widget)]) 
+      return IconButton(icon: Icon(Icons.check_circle_outline, size: 25), onPressed: () {
+        setState(() {
+          inspoWidgetsShufflable[inspoWidgets.indexOf(widget)] = false;
+        });
+      });
+    else
+      return IconButton(icon: Icon(Icons.check_circle, size: 25), onPressed: () {
+        setState(() {
+          inspoWidgetsShufflable[inspoWidgets.indexOf(widget)] = true;
+        });
+      });
   }
 
   @override
@@ -105,6 +123,7 @@ class HomeScreenState extends State<HomeScreen> {
                 },
                 title: Text(inspoWidgets[i].toString()),
                 controlAffinity: ListTileControlAffinity.leading,
+                activeColor: Colors.black
               ),
             ]
         ),
@@ -120,11 +139,19 @@ class HomeScreenState extends State<HomeScreen> {
       ),
 
       body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+        padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           // children: inspoWidgets,
-          children: inspoWidgets.where((widget) => isSelected(widget)).toList(),
+          children: [for (var widget in inspoWidgets.where((widget) => isSelected(widget)).toList())
+            Row(
+              children: [
+                widget,
+                Spacer(),
+                shuffeToggle(widget)
+              ],
+            )
+          ],
         ),
       ),
 

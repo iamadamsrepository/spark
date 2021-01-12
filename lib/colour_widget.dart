@@ -16,7 +16,7 @@ class ColourWidgetState extends InspoWidgetState {
   Color colour;
 
   @override 
-  void next() {
+  void shuffle() {
     setState(() {
       colour = randomColour.randomColor();
     });

@@ -14,29 +14,14 @@ class InspoWidget extends StatefulWidget {
   }
 }
 
-class InspoWidgetState extends State<InspoWidget> with AutomaticKeepAliveClientMixin<InspoWidget>{
-  bool shuffleOn = true;
-  bool get shuffleStatus => shuffleOn;
-
-  bool get wantKeepAlive => true;
-
+class InspoWidgetState extends State<InspoWidget> {
   @override 
   void initState() {
     super.initState();
     shuffle();
   }
 
-  void shuffle() {
-    if (shuffleOn) next();
-  }
-
-  void next() {}
-
-  void toggleShuffle() {
-    setState(() {
-      shuffleOn = !shuffleOn;
-    });
-  }
+  void shuffle() {}
 
   Widget buildInspoVal() {
     return Text(widget.title);
@@ -44,8 +29,6 @@ class InspoWidgetState extends State<InspoWidget> with AutomaticKeepAliveClientM
 
   @override 
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -57,10 +40,7 @@ class InspoWidgetState extends State<InspoWidget> with AutomaticKeepAliveClientM
               style: TextStyle(fontWeight: FontWeight.bold)
             )
           ),
-          buildInspoVal(),
-          Spacer(),
-          if (shuffleOn) IconButton(icon: Icon(Icons.shuffle), onPressed: toggleShuffle)
-          else IconButton(icon: Icon(Icons.ac_unit), onPressed: toggleShuffle)
+          buildInspoVal()
         ],
       ),
     );

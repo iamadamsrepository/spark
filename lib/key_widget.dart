@@ -33,7 +33,7 @@ class KeyWidgetState extends InspoWidgetState {
   String morm;
 
   @override 
-  void next() {
+  void shuffle() {
     setState(() {
       key = keys[Random().nextInt(keys.length)];
       morm = majmin[Random().nextInt(majmin.length)];
