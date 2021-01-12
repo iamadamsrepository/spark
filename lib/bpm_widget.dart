@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:spark/inspo_widget.dart';
+import 'package:spark/inspo_string_widget.dart';
 
-class BPMWidget extends InspoWidget {
+class BPMWidget extends InspoStringWidget {
   BPMWidget({Key key}) : super(key: key);
 
   final String title = 'BPM';
@@ -11,7 +11,7 @@ class BPMWidget extends InspoWidget {
   BPMWidgetState createState() => BPMWidgetState();
 }
 
-class BPMWidgetState extends InspoWidgetState {
+class BPMWidgetState extends InspoStringWidgetState {
   static List<int> bpms = [
     60,60,60,
     65,
@@ -43,17 +43,11 @@ class BPMWidgetState extends InspoWidgetState {
     195,
     200,
   ];
-  int bpm;
 
   @override 
   void shuffle() {
     setState(() {
-      bpm = bpms[Random().nextInt(bpms.length)];
+      inspoString = bpms[Random().nextInt(bpms.length)].toString();
     });
-  }
-
-  @override 
-  Widget buildInspoVal() {
-    return Text(bpm.toString());
   }
 }

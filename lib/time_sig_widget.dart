@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:spark/inspo_widget.dart';
+import 'package:spark/inspo_string_widget.dart';
 
-class TimeSigWidget extends InspoWidget {
+class TimeSigWidget extends InspoStringWidget {
   TimeSigWidget({Key key}) : super(key: key);
 
   final String title = 'Time Signature';
@@ -11,25 +11,19 @@ class TimeSigWidget extends InspoWidget {
   TimeSigWidgetState createState() => TimeSigWidgetState();
 }
 
-class TimeSigWidgetState extends InspoWidgetState {
+class TimeSigWidgetState extends InspoStringWidgetState {
   static List<String> timeSigs = [
-    '4/4', '4/4', '4/4', '4/4', '4/4',
-    '6/8', '6/8', '6/8',
+    '4/4', '4/4', '4/4', '4/4', '4/4', '4/4', '4/4', '4/4',
+    '6/8', '6/8', '6/8', '6/8',
     '2/4', 
     '3/4', 
     '12/8',
   ];
-  String timeSig;
 
   @override 
   void shuffle() {
     setState(() {
-      timeSig = timeSigs[Random().nextInt(timeSigs.length)];
+      inspoString = timeSigs[Random().nextInt(timeSigs.length)];
     });
-  }
-
-  @override 
-  Widget buildInspoVal() {
-    return Text(timeSig);
   }
 }

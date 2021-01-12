@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Spark',
       theme: ThemeData(
-        primaryColor: Colors.grey,
+        primaryColor: Color.fromRGBO(244, 194, 194, 1),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.grey,
           foregroundColor: Colors.black),

@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:spark/inspo_widget.dart';
+import 'package:spark/inspo_string_widget.dart';
 
-class KeyWidget extends InspoWidget {
+class KeyWidget extends InspoStringWidget {
   KeyWidget({Key key}) : super(key: key);
 
   final String title = 'Key';
@@ -11,7 +11,7 @@ class KeyWidget extends InspoWidget {
   KeyWidgetState createState() => KeyWidgetState();
 }
 
-class KeyWidgetState extends InspoWidgetState {
+class KeyWidgetState extends InspoStringWidgetState {
   List<String> keys = [
     'A', 'A',
     'A#', 'B♭',
@@ -29,19 +29,11 @@ class KeyWidgetState extends InspoWidgetState {
 
   List<String> majmin = ['Major', 'Minor'];
 
-  String key;
-  String morm;
-
   @override 
   void shuffle() {
     setState(() {
-      key = keys[Random().nextInt(keys.length)];
-      morm = majmin[Random().nextInt(majmin.length)];
+      inspoString = keys[Random().nextInt(keys.length)] 
+                  + ' ' + majmin[Random().nextInt(majmin.length)];
     });
-  }
-
-  @override 
-  Widget buildInspoVal() {
-    return Text('$key $morm');
   }
 }

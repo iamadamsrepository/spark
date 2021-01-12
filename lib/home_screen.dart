@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:quiver/iterables.dart';
+import 'package:spark/artwork_widget.dart';
 import 'package:spark/colour_widget.dart';
 import 'package:spark/inspo_widget.dart';
 import 'package:spark/bpm_widget.dart';
 import 'package:spark/key_widget.dart';
 import 'package:spark/time_sig_widget.dart';
+import 'package:spark/word_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,24 +19,35 @@ class HomeScreenState extends State<HomeScreen> {
     (key) => BPMWidget(key: key),
     (key) => KeyWidget(key: key),
     (key) => TimeSigWidget(key: key),
+    (key) => WordWidget(key: key),
     (key) => ColourWidget(key: key),
+    (key) => ArtworkWidget(key: key),
     ];
   List<GlobalKey<InspoWidgetState>> inspoWidgetsStateKeys = [];
   List<InspoWidget> inspoWidgets = [];
   List<bool> inspoWidgetsShowable = [];
   List<bool> inspoWidgetsShufflable = [];
 
+  GlobalKey<ColourWidgetState> colourKey;
+
   @override 
   void initState() {
     super.initState();
-    for(final widgetType in inspoWidgetsToInit) {
-      GlobalKey<InspoWidgetState> key = GlobalKey();
+    for(int i = 0; i < inspoWidgetsToInit.length; i++) {
+      Function widgetType = inspoWidgetsToInit[i];
+      GlobalKey<InspoWidgetState> key;
+      if (i == 4)  {
+        key = GlobalKey<ColourWidgetState>();
+        colourKey = key;
+      }
+      else key = GlobalKey<InspoWidgetState>();
       InspoWidget widget = widgetType(key);
       inspoWidgetsStateKeys.add(key);
       inspoWidgets.add(widget);
       inspoWidgetsShowable.add(true);
       inspoWidgetsShufflable.add(true);
     }
+    setState(() {});
   }
 
   void shuffle() {
@@ -43,6 +55,7 @@ class HomeScreenState extends State<HomeScreen> {
       if(key.currentState != null && inspoWidgetsShufflable[inspoWidgetsStateKeys.indexOf(key)]) 
         key.currentState.shuffle();
     }
+    setState(() {});
   }
 
   void openInspoWidgetSelector() {
@@ -65,6 +78,12 @@ class HomeScreenState extends State<HomeScreen> {
     return inspoWidgetsShowable[inspoWidgets.indexOf(widget)];
   }
 
+  Color getColour() {
+    if (colourKey.currentState != null)
+      return colourKey.currentState.colour;
+    else return Theme.of(context).primaryColor;
+  }
+
   Widget shuffeToggle(widget) {
     if (inspoWidgetsShufflable[inspoWidgets.indexOf(widget)]) 
       return IconButton(icon: Icon(Icons.check_circle_outline, size: 25), onPressed: () {
@@ -82,20 +101,24 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build (BuildContext context) {
+    Color bgColour = getColour();
+    Color fgColour = bgColour.computeLuminance() > 0.55 
+                   ? Colors.black : Colors.white;
+
     return Scaffold(
       key: homeScreenKey,
 
       appBar: AppBar(
         title: Text(
-          'Spark', 
-          // style: TextStyle(fontSize: 28),
+          'writersblok',
+          style: TextStyle(color: fgColour),
         ),
-        // elevation: 0,
+        backgroundColor: bgColour,
         actions: <Widget>[
           Padding (
             padding: EdgeInsets.only(right: 10),
             child: IconButton(
-              icon: Icon(Icons.create, size: 30,), 
+              icon: Icon(Icons.create, size: 30, color: fgColour), 
               onPressed: openInspoWidgetSelector,
             ),
           )
@@ -103,7 +126,7 @@ class HomeScreenState extends State<HomeScreen> {
         leading: Padding (
           padding: EdgeInsets.only(left: 10),
           child: IconButton(
-            icon: Icon(Icons.help, size: 30,), 
+            icon: Icon(Icons.help, size: 30, color: fgColour), 
             onPressed: openSpiel,
           ),
         ),
@@ -138,26 +161,29 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // children: inspoWidgets,
-          children: [for (var widget in inspoWidgets.where((widget) => isSelected(widget)).toList())
-            Row(
-              children: [
-                widget,
-                Spacer(),
-                shuffeToggle(widget)
-              ],
-            )
-          ],
+      body: SingleChildScrollView(
+              child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // children: inspoWidgets,
+            children: [for (var widget in inspoWidgets.where((widget) => isSelected(widget)).toList())
+              Row(
+                children: [
+                  widget,
+                  Spacer(),
+                  shuffeToggle(widget)
+                ],
+              )
+            ],
+          ),
         ),
       ),
 
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.shuffle),
+        child: Icon(Icons.shuffle, color: fgColour),
         onPressed: shuffle,
+        backgroundColor: bgColour,
       ),
     );
   }
