@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:spark/inspo_string_widget.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 class BPMWidget extends InspoStringWidget {
   BPMWidget({Key key}) : super(key: key);
@@ -44,10 +46,54 @@ class BPMWidgetState extends InspoStringWidgetState {
     200,
   ];
 
+  bool metronomeOn = false;
+  AudioPlayer audio = AudioPlayer();
+  AudioCache cache = AudioCache();
+
   @override 
   void shuffle() {
     setState(() {
       inspoString = bpms[Random().nextInt(bpms.length)].toString();
+    });
+  }
+
+  @override 
+  Widget buildInspoVal() {
+    return ConstrainedBox(
+      child: Row(
+        children: [
+          super.buildInspoVal(),
+          Spacer(),
+          metronomeSwitch(),
+        ],
+      ),
+      constraints: BoxConstraints(maxWidth: 150),);
+  }
+
+  Widget metronomeSwitch() {
+    return IconButton(
+      icon: metronomeOn 
+          ? Icon(Icons.pause_circle_filled)
+          : Icon(Icons.play_circle_outline), 
+      iconSize: 40,
+      splashColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      onPressed: () => {
+        // setState(() {
+        //   metronomeOn = metronomeOn ? false : true;
+        // })
+        toggleMetronome()
+      });
+  }
+
+  void toggleMetronome() async{
+    if (metronomeOn) {
+      audio.stop();
+    } else {
+      audio = await cache.loop('metronome/metronome_$inspoString.wav');
+    }
+    setState(() {
+      metronomeOn = metronomeOn ? false : true;
     });
   }
 }

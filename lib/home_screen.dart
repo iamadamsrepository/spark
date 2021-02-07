@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:spark/artwork_widget.dart';
+import 'package:spark/image_widget.dart';
 import 'package:spark/colour_widget.dart';
 import 'package:spark/inspo_widget.dart';
 import 'package:spark/bpm_widget.dart';
 import 'package:spark/key_widget.dart';
 import 'package:spark/time_sig_widget.dart';
 import 'package:spark/word_widget.dart';
+import 'package:spark/genre_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,9 +21,13 @@ class HomeScreenState extends State<HomeScreen> {
     (key) => KeyWidget(key: key),
     (key) => TimeSigWidget(key: key),
     (key) => WordWidget(key: key),
+    (key) => GenreWidget(key: key),
     (key) => ColourWidget(key: key),
-    (key) => ArtworkWidget(key: key),
+    (key) => ImageWidget(key: key),
     ];
+
+  final int indexOfColourWidget = 5;
+
   List<GlobalKey<InspoWidgetState>> inspoWidgetsStateKeys = [];
   List<InspoWidget> inspoWidgets = [];
   List<bool> inspoWidgetsShowable = [];
@@ -36,7 +41,7 @@ class HomeScreenState extends State<HomeScreen> {
     for(int i = 0; i < inspoWidgetsToInit.length; i++) {
       Function widgetType = inspoWidgetsToInit[i];
       GlobalKey<InspoWidgetState> key;
-      if (i == 4)  {
+      if (i == indexOfColourWidget)  {
         key = GlobalKey<ColourWidgetState>();
         colourKey = key;
       }
@@ -104,7 +109,9 @@ class HomeScreenState extends State<HomeScreen> {
     Color bgColour = getColour();
     Color fgColour = bgColour.computeLuminance() > 0.55 
                    ? Colors.black : Colors.white;
-
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    // print('w ' + width.toString() + ' h ' + height.toString());
     return Scaffold(
       key: homeScreenKey,
 
@@ -163,10 +170,9 @@ class HomeScreenState extends State<HomeScreen> {
 
       body: SingleChildScrollView(
               child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(width/30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // children: inspoWidgets,
             children: [for (var widget in inspoWidgets.where((widget) => isSelected(widget)).toList())
               Row(
                 children: [
